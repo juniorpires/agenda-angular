@@ -9,18 +9,71 @@ import { Registro } from '../app/model/registro';
 export class RegistroService{
 
 
-    private url:string  = 'http://localhost:3000/api/v1/registro';
+    private url:string  = 'http://localhost:3000/api/v1/registro/';
 
     constructor(public http: HttpClient){}
     
 
     
-    insertRegistro(nome,telefone): Promise<Registro[]>{
-        let body = {
-              "nome":nome,
-              "telefone":telefone  
-        }
-        return this.http.post(this.url,body,{})
+    insertRegistro(registro): Promise<Registro[]>{
+        let body = JSON.stringify(registro)
+        let js = JSON.parse(body)
+        
+      
+
+        return this.http.post(this.url,js,{})
+        .toPromise()
+        .then(response => {
+            return response
+        })
+            
+        .catch(this.handleError)
+    }
+
+    update(registro): Promise<Registro[]>{
+        let body = JSON.stringify(registro)
+        let js = JSON.parse(body)
+        let lUrl = this.url+registro.id
+      
+
+        return this.http.put(lUrl,js,{})
+        .toPromise()
+        .then(response => {
+            return response
+        })
+            
+        .catch(this.handleError)
+    }
+
+
+    listar(): Promise<Registro[]>{
+        return this.http.get(this.url,{})
+        .toPromise()
+        .then(response => {
+            return response
+        })
+            
+        .catch(this.handleError)
+    }
+
+
+    buscar(id): Promise<Registro[]>{
+        let lUrl = this.url+id
+        
+        return this.http.get(lUrl,{})
+        .toPromise()
+        .then(response => {
+            console.log(response[0])
+            return response
+        })
+            
+        .catch(this.handleError)
+    }
+
+
+    deletar(id): Promise<Registro[]>{
+        let lUrl = this.url+id
+        return this.http.delete(lUrl,{})
         .toPromise()
         .then(response => {
             return response

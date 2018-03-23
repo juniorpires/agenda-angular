@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component,OnInit } from '@angular/core';
 import {Tarefa} from './model/tarefa';
 import {RegistroService} from '../services/RegistroService';
+import { Registro } from './model/registro';
 
 @Component({
   selector: 'app-root',
@@ -9,27 +10,70 @@ import {RegistroService} from '../services/RegistroService';
   providers:[RegistroService]
 })
 export class AppComponent {
-	tarefas: Tarefa[];
+  registros: Registro[];
+  registro: Registro;
   
   constructor( public service: RegistroService) {
-    this.tarefas = [  ];   
+     
+
   }
 
-   gravar(titulo, descricao, peso){
-      //let tarefa = new Tarefa(titulo, descicao, peso);
-      //this.tarefas.push(tarefa);
+  ngOnInit(){
+    this.registro = new Registro("","")
+    this.listar()
+  }
 
-      this.service.insertRegistro(titulo,descricao).then(
+  public listar(){
+    this.service.listar().then(
+      response => this.registros = response
+    ) 
+  }
+
+  public buscar(id){
+    this.service.buscar(id).then(
+      response => {
+        
+        this.registro = response[0]
+        
+
+      }
+      
+    ) 
+
+   
+  }
+
+
+
+   gravar(){
+      let registro = new Registro(this.registro.nome,this.registro.telefone)
+        this.service.insertRegistro(registro).then(
         result =>{
           console.log(result)
+          this.registro = new Registro("","")
+          this.listar()
         }
       )
+    }
 
-
+    update(id){
+      let registro = new Registro(this.registro.nome,this.registro.telefone)
+      registro.id = id;
+      this.service.update(registro).then(
+          result => { 
+            this.registro = new Registro("","")
+            this.listar()
+          }
+        )
+    
     }
 
     deletar(id){
-     
-       this.tarefas.splice(id, 1);
+      this.service.deletar(id).then(
+        result=> {
+          console.log(result)
+          this.listar()
+        }
+      )
     }
 }

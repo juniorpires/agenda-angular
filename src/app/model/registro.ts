@@ -1,7 +1,8 @@
 export class Registro{
+
+	public id:number
     constructor(
-	
-		public id: number,
 		public nome: string,
 		public telefone:string){}
 }
+

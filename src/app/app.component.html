@@ -1,27 +1,28 @@
 <section class="container">
-<h1>Tarefas</h1>
+<h1>Registros</h1>
+
+
     <div class="row">
-    
+        <form>
         <div class="form-group">
-            <div class="col-md-3">
-                <input type="text" class="form-control" placeholder="Titulo" name="titulo" #titulo >  
-            </div>
+                <div class="col-md-3">   
+                 <input type="text" class="form-control" [(ngModel)]="registro.nome" placeholder="Nome" name="nome"  >  
+                </div>
         
-            <div class="col-md-4">
-                <textarea name="descricao" class="form-control"  placeholder="Descrição" id="" cols="25" rows="1" #descricao ></textarea>     
-            </div>
+                <div class="col-md-4">
+                 <input type="text" name="telefone"  [(ngModel)]="registro.telefone" class="form-control"  placeholder="Telefone" id="">    
+                </div>
         
-            <div class="col-md-2">
-                <input type="number" class="form-control"  min="1" max="10" placeholder="Peso" #peso />
-            </div> 
-        
-            <div class="col-md-3">
-                <button  class="btn btn-primary" (click)="gravar(titulo.value, descricao.value, peso.value)" label="GRAVAR"> GRAVAR</button>
+                <div class="col-md-3">
+                    <button  (click)="gravar()" *ngIf="!registro.id" class="btn btn-primary"  label="GRAVAR"> GRAVAR</button>
+                    <button  (click)="update(registro.id)" *ngIf="registro.id"  class="btn btn-info"  label="Atualizar"> ATUALIZAR</button>
+                </div>
             </div>
-        </div>
+        </form>
+
     </div>
 
-<h1>Informações das tarefas</h1>
+<h1>Informações dos registros</h1>
   
   
 
@@ -30,18 +31,18 @@
       <thead>
         <tr>
           
-          <th>TITULO</th>
-          <th>DESCRIÇÃO</th>
-          <th>PESO</th>
+          <th>Nome</th>
+          <th>Telefone</th>
           <th>EXCLUIR</th>
+          <th>EDITAR</th>
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let tarefa of tarefas; let i=index">
-          <th>{{tarefa.titulo}}</th>
-          <td>{{tarefa.descricao}}</td>
-          <td>{{tarefa.peso}}</td>
-          <td><button class="btn btn-danger" (click)="deletar(i)" label="Excluir"> DELETAR</button></td>
+        <tr *ngFor="let r of registros; let i=index">
+          <td [innerText]="r.nome"></td>
+          <td [innerText]="r.telefone"></td>
+          <td><button class="btn btn-danger" (click)="deletar(r.id)" label="Excluir"> DELETAR</button></td>
+          <td><button class="btn btn-default" (click)="buscar(r.id)" label="Editar"> EDITAR</button></td>
           
         </tr>
     </tbody>
